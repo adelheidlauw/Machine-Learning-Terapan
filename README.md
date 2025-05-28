@@ -79,16 +79,98 @@ Untuk memahami dataset yang digunakan dilakukan:
 ## Data Preparation
 Persiapan data yang dilakukan: 
 - Mengecek informasi singkat dan statistika dataset
-  Dilakukan dengan menggunakan `.info()` dan `.describe()` agar memudahkan saat melakukan pemrosesan data
+  Dilakukan dengan menggunakan `.head()`,`.info()` dan `.describe()` agar memudahkan saat melakukan pemrosesan data
 - Mengecek adanya *missing value*
   Mengevaluasi jumlah data yang memiliki data kosong atau NaN di setiap kolomnya agar tidak menghasilkan prediksi yang salah dengan `.isnull().sum()`.
 - Identifikasi Fitur dan Target
   Kolom HeartDisease diidentifikasi sebagai variabel target (y) dan sisanya akan digunakan sebagai variabel prediktor (X).
 - Pembagian data (*training* dan *testing set*)
-  Dibagi menjadi 80% *training* dan 20% *testing* dan menggunakan parameter `stratify=y` untuk memastikan proporsi kelas target di data *training* dan *testing* sama.
+  Dibagi menjadi 80% *training* dan 20% *testing* dan menggunakan parameter `stratify=y` untuk memastikan proporsi kelas target di data *training* dan *testing* sama. Selain itu, pembagian ini untuk mencegah *overfitting* pada data *testing*.
 - Preprocessing fitur
-  Dilakukan transform kolom dengan `StandardScaler` untuk kolom numerik sehingga memiliki rata-rata 0 dan standar deviasi 1. Fitur ini mencegah adanya dominasi perhitungan jarak atau bobot model dibandingkan fitur dengan rentang kecil sepertti pada variabel Sex yang memiliki nilai 0 atau 1.
+  Dilakukan transform kolom dengan `StandardScaler` untuk kolom numerik sehingga memiliki rata-rata 0 dan standar deviasi 1. Fitur ini mencegah adanya dominasi perhitungan jarak atau bobot model dibandingkan fitur dengan rentang kecil sepertti pada variabel Sex yang memiliki nilai 0 atau 1. Digunakan juga One-Hot Encoding untuk kolom kategorikal menjadi kolom biner dengan parameter `handle_unkwown='ignore'` untuk menangani kategori yang mungkin muncul di data *testing* tetapi tidak ada di data *training*.
 
+   ### Hasil Dari Data Preparation
+  ```
+  File yang berhasil diekstrak:
+   ['.config', 'heart.csv', 'heart-failure-prediction.zip', 'sample_data']
+   Age Sex ChestPainType  RestingBP  Cholesterol  FastingBS RestingECG  MaxHR  \
+   0   40   M           ATA        140          289          0     Normal    172   
+   1   49   F           NAP        160          180          0     Normal    156   
+   2   37   M           ATA        130          283          0         ST     98   
+   3   48   F           ASY        138          214          0     Normal    108   
+   4   54   M           NAP        150          195          0     Normal    122   
+
+  ExerciseAngina  Oldpeak ST_Slope  HeartDisease  
+   0              N      0.0       Up             0  
+   1              N      1.0     Flat             1  
+   2              N      0.0       Up             0  
+   3              Y      1.5     Flat             1  
+   4              N      0.0       Up             0  
+   ```
+  Hasil dari 5 baris pertama dataset yang digunakan dengan perintah `.head()`.
+   ```
+   <class 'pandas.core.frame.DataFrame'>
+   RangeIndex: 918 entries, 0 to 917
+   Data columns (total 12 columns):
+    #   Column          Non-Null Count  Dtype  
+   ---  ------          --------------  -----  
+    0   Age             918 non-null    int64  
+    1   Sex             918 non-null    object 
+    2   ChestPainType   918 non-null    object 
+    3   RestingBP       918 non-null    int64  
+    4   Cholesterol     918 non-null    int64  
+    5   FastingBS       918 non-null    int64  
+    6   RestingECG      918 non-null    object 
+    7   MaxHR           918 non-null    int64  
+    8   ExerciseAngina  918 non-null    object 
+    9   Oldpeak         918 non-null    float64
+    10  ST_Slope        918 non-null    object 
+    11  HeartDisease    918 non-null    int64  
+   dtypes: float64(1), int64(6), object(5)
+   memory usage: 86.2+ KB
+   None
+   ```
+   Terdapat 918 baris kolom dengan tipe dari setiap variabelnya menggunakan `.info()`.
+   ```
+            Age   RestingBP  Cholesterol   FastingBS       MaxHR  \
+   count  918.000000  918.000000   918.000000  918.000000  918.000000   
+   mean    53.510893  132.396514   198.799564    0.233115  136.809368   
+   std      9.432617   18.514154   109.384145    0.423046   25.460334   
+   min     28.000000    0.000000     0.000000    0.000000   60.000000   
+   25%     47.000000  120.000000   173.250000    0.000000  120.000000   
+   50%     54.000000  130.000000   223.000000    0.000000  138.000000   
+   75%     60.000000  140.000000   267.000000    0.000000  156.000000   
+   max     77.000000  200.000000   603.000000    1.000000  202.000000   
+
+          Oldpeak  HeartDisease  
+   count  918.000000    918.000000  
+   mean     0.887364      0.553377  
+   std      1.066570      0.497414  
+   min     -2.600000      0.000000  
+   25%      0.000000      0.000000  
+   50%      0.600000      1.000000  
+   75%      1.500000      1.000000  
+   max      6.200000      1.000000  
+   ```
+   Tabel statistika deskriptif untuk mempermudah melihat nilai-nilai pada kolom numerik. Pada variabel RestingBP dan Cholesterol, nilai minimumnya 0 sehingga data ini harus dicek kembali. 
+   ```
+   Jumlah nilai NaN di setiap kolom:
+   Age               0
+   Sex               0
+   ChestPainType     0
+   RestingBP         0
+   Cholesterol       0
+   FastingBS         0
+   RestingECG        0
+   MaxHR             0
+   ExerciseAngina    0
+   Oldpeak           0
+   ST_Slope          0
+   HeartDisease      0
+   dtype: int64
+   ```
+   Tidak ada variabel yang memiliki kolom kosong.
+  
 ## Modeling
 Tahapan ini membahas mengenai model machine learning yang digunakan untuk menyelesaikan permasalahan. Anda perlu menjelaskan tahapan dan parameter yang digunakan pada proses pemodelan.
 
