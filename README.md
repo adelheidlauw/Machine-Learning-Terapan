@@ -30,31 +30,30 @@ dapat diselesaikan dengan pengumpulan data dan pengembangan model prediksi yang 
 Proses klasifikasi yang dilakukan untuk memprediksi kemungkinan seorang pasien didiagnosis gagal jantung (HeartDisease) berdasarkan dataset yang digunakan.
 
 ### Problem Statements
-
-- Seberapa efektif kita dapat mengidentifikasi pasien yang berisiko tinggi mengalami gagal jantung berdasarkan dataset?
--  Dari semua pasien yang sebenarnya akan mengalami gagal jantung, berapa banyak yang berhasil diidentifikasi oleh model kita?
-- Fitur klinis apa yang paling berpengaruh atau merupakan prediktor terkuat untuk kejadian gagal jantung?
-- Bagaimana kombinasi usia dan kadar gula darah puasa (FastingBS) memengaruhi risiko gagal jantung? Apakah gula darah puasa yang tinggi merupakan faktor risiko yang lebih signifikan pada kelompok usia tertentu?
+1. Seberapa efektif kita dapat mengidentifikasi pasien yang berisiko tinggi mengalami gagal jantung berdasarkan dataset?
+2. Dari semua pasien yang sebenarnya akan mengalami gagal jantung, berapa banyak yang berhasil diidentifikasi oleh model kita?
+3. Fitur klinis apa yang paling berpengaruh atau merupakan prediktor terkuat untuk kejadian gagal jantung?
+4. Bagaimana kombinasi usia dan kadar gula darah puasa (FastingBS) memengaruhi risiko gagal jantung? Apakah gula darah puasa yang tinggi merupakan faktor risiko yang lebih signifikan pada kelompok usia tertentu?
 
 ### Goals
+Proyek ini bertujuan untuk mengembangkan pemahaman tentang faktor-faktor yang berkontribusi terhadap penyakit CVDs, serta membangun model prediktif yang dapat diandalkan untuk membantu indentifiksi dini pasien yang beresiko tinggi. 
 
-Menjelaskan tujuan dari pernyataan masalah:
-- Mengukur akurasi keseluruhan model. Seberapa sering model memprediksi dengan benar, baik itu memprediksi adanya gagal jantung atau tidak adanya gagal jantung dengan metrik Accuracy Score.
-- Mengukur kemampuan model untuk "menangkap" semua kasus positif. Ini sangat penting untuk memastikan tidak ada pasien berisiko tinggi yang terlewatkan.
-- Jawaban pernyataan masalah n
-
-Semua poin di atas harus diuraikan dengan jelas. Anda bebas menuliskan berapa pernyataan masalah dan juga goals yang diinginkan.
-
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Menambahkan bagian “Solution Statement” yang menguraikan cara untuk meraih goals. Bagian ini dibuat dengan ketentuan sebagai berikut: 
+Solusi yang diberikan:
+1. Membangun model klasifikasi dengan mengukur Akurasi Prediksi Keseluruhan
+   Menilai kinerja model dalam membuat prediksi yang benar.
+2. Memaksimalkan identifikasi kasus positif
+   Meningkatkan kasus positif dan mengurangi false negatives pada recall model.
+3. Mengidentifikasi faktor risiko utama
+   Meningkatkan pemahaman klinis dan memberikan wawasan tentang resiko yang dialami oleh pasien yang meninggal.
+4. Menganalisis interaksi fitur
+   Mengidentifikasi kelompok berisiko spesifik menurut kelompok umur dengan kadar gula darah puasa (FastingBS)
 
     ### Solution statements
   
-    - Mengajukan 2 atau lebih solution statement. Misalnya, menggunakan dua atau lebih algoritma untuk mencapai solusi yang diinginkan atau melakukan improvement pada baseline model dengan hyperparameter tuning.
-    - Solusi yang diberikan harus dapat terukur dengan metrik evaluasi.
-
+    Solusi yang diberikan sudah menampilkan metrik evaluasi dari model.
+   
 ## Data Understanding
-Program yang dibuat menggunakan metode regresi logistik dengan menggunakan dataset dari Kaggle berjudul [Heart Failure Prediction Dataset](https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction) yang memiliki 918 data. 
+Proyek yang dibuat menggunakan metode regresi logistik dengan menggunakan dataset dari Kaggle berjudul [Heart Failure Prediction Dataset](https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction) yang memiliki 918 data. 
 
 Paragraf awal bagian ini menjelaskan informasi mengenai data yang Anda gunakan dalam proyek. Sertakan juga sumber atau tautan untuk mengunduh dataset. Contoh: [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Restaurant+%26+consumer+data).
 
