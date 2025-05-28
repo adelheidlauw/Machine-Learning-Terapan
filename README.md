@@ -59,9 +59,24 @@ Proyek yang dibuat menggunakan metode regresi logistik dengan menggunakan datase
 - Age : Umur dari pasien [years]
 - Sex : Jenis kelamin [M: Male, F: Female]
 - ChestPainType : Tipe Nyeri Dada [TA: Typical Angina, ATA: Atypical Angina, NAP: Non-Anginal Pain, ASY: Asymptomatic]
+- RestingBP : Tekanan darah [mm Hg]
+- Cholesterol : Kolestrol serum [mm/dl]
+- FastingBS : Puasa gula darah [1: jika puasa gula darahnnya>120mg/dl, 0: lainnya]
+- RestingECG : Hasil elektrokardiogram istirahat [Normal: Normal, ST: memiliki kelainan gelombang ST-T (gelombang T inversi dan/atau ST eleavasi atau depresi > 0.05 mV), LVH: menampilkan hipertrofi ventrikel kiri yang mungkin atau pasti menurut kriteria Estes]
+- MaxHR : Detak jantung maksimum yang dicapai [bernilai numerik antara 60 dan 202]
+- ExerciseAngina : Latihan induksi angina [Y:Iya, N: Tidak]
+- Oldpeak : oldpeak = ST [bernilai numerik yang mengukur ketika depresi]
+- ST_Slope : Kemiringan dari puncak latihan segmen ST
+- HeartDisease : Hasil output kelas [1:penyakit jantung, 0: normal]
 
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Melakukan beberapa tahapan yang diperlukan untuk memahami data, contohnya teknik visualisasi data atau exploratory data analysis.
+### Exploratory Data Analysis (EDA)
+Untuk memahami dataset yang digunakan dilakukan:
+- Mengecek informasi singkat dan statistika dataset
+  Dilakukan dengan menggunakan `.info()` dan `.describe()`
+- Mengecek adanya *missing value*
+  Mengevaluasi jumlah data yang memilikinata kosong atau NaN di setiap kolomnya dengan `.isnull().sum()`
+- Visualisasi data
+  Menampilkan histogram, barplot, confusion matrix dari data-data numerik dan kategorikal, serta mengecek relevansi penyakit jantung dengan faktor lainnya
 
 ## Data Preparation
 Pada bagian ini Anda menerapkan dan menyebutkan teknik data preparation yang dilakukan. Teknik yang digunakan pada notebook dan laporan harus berurutan.
