@@ -172,10 +172,20 @@ Persiapan data yang dilakukan:
    Tidak ada variabel yang memiliki kolom kosong.
   
 ## Modeling
-Tahapan ini membahas mengenai model machine learning yang digunakan untuk menyelesaikan permasalahan. Anda perlu menjelaskan tahapan dan parameter yang digunakan pada proses pemodelan.
+Setelah data disiapkan dan dipahami melalui EDA, lengkah berikutnya adalah membangun model yang mampu mempelajari pola dari data *training* dan membuat prediksi akurat pada data baru. Pada proyek ini, model yang digunakan adalah regresi logistik yang menjadi algoritma klasifikasi. Algoritma ini digunakan untuk memprediksi probabilitas hasil biner, misalnya 0 titik gagal jantung dan 1 gagal jantung.
+- Kelebihan Regresi Logistik:
+   - Sederhana dan cepat
+   - Menghasilkan *output* probabilitas
+   - Efektif untuk data yang dapat dipisahkan secara linier
+- Kekurangan Regresi Logistik:
+   - Asumsi linieritas, memungkinkan model bekerja tidak optimal
+   - Sensitif terhadap fitur yang tidak relevan
+   - Kurang baik untuk data yang hubungan kompleks
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan kelebihan dan kekurangan dari setiap algoritma yang digunakan.
+### Tahapan Modeling
+1. Inisialisasi Model
+2. Pembentukan Pipeline
+3. Pelatihan Model
 - Jika menggunakan satu algoritma pada solution statement, lakukan proses improvement terhadap model dengan hyperparameter tuning. **Jelaskan proses improvement yang dilakukan**.
 - Jika menggunakan dua atau lebih algoritma pada solution statement, maka pilih model terbaik sebagai solusi. **Jelaskan mengapa memilih model tersebut sebagai model terbaik**.
 
