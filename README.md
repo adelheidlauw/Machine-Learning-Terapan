@@ -183,15 +183,18 @@ Setelah data disiapkan dan dipahami melalui EDA, lengkah berikutnya adalah memba
    - Kurang baik untuk data yang hubungan kompleks
 
 ### Tahapan Modeling
-1. Inisialisasi Model
-2. Pembentukan Pipeline
-3. Pelatihan Model
-- Jika menggunakan satu algoritma pada solution statement, lakukan proses improvement terhadap model dengan hyperparameter tuning. **Jelaskan proses improvement yang dilakukan**.
-- Jika menggunakan dua atau lebih algoritma pada solution statement, maka pilih model terbaik sebagai solusi. **Jelaskan mengapa memilih model tersebut sebagai model terbaik**.
+1. Pelatihan Model Regresi Logistik
+   - Inisialisasi model `LogisticRegression`
+   - Pelatihan model `model.fit()`, dilatih menggunakan data *training* yang sudah diskalakan (`X_train_scaled`) dan variabel target yang sesuai (`y_train`). Proses pelatihan ini untuk meminimalkan fungsi loss dan memprediksi probabilitas HeartDisease. Parameter yang digunakan `random_state=42` untuk melakukan pengambilan acak dan `solver=`liblinear`` untuk optimasi, menemukan bobot koefisien terbaik.
+2. Prediksi
+   - Setelah model berhasil dilatih, `model.predict()` akan digunakan untuk membuat prediksi pada data *testing* yang sudah diskalakan (`X_test_scaled`). Model ini akan menghasilkan *output* biner (0 atau 1) yang mewakili prediksi apakah pasien akan mengalami gagal jantung atau tidak.
+3. Merubah variabel target menjadi FastingBS untuk menjawab pertanyaan bisnis keempat untuk melakukan analisis interaksi antarfitur.
 
 ## Evaluation
-Pada bagian ini anda perlu menyebutkan metrik evaluasi yang digunakan. Lalu anda perlu menjelaskan hasil proyek berdasarkan metrik evaluasi yang digunakan.
-
+Setelah model berhasil dilatih, selanjutnya dilakukan evaluasi kinerja model. Metrik evaluasi dapat membantu kita memahami seberapa baik model dalam memprediksi HeartDisease dan menjawab pertanyaan-pertanyaan bisnis yang telat ditetapkan. Dalam proyek ini, digunakan akurasi, *confusion matrix*, recall, dan F1-Score. Metrik-metrik ini dipilih karena sangat relevan untuk masalah klasifikasi biner yang di mana identifikasi positif dan meminimalisasi kesalahan dengan konsekuensi penting.
+- Akurasi (*Accuracy Score*)
+- Recall
+- 
 Sebagai contoh, Anda memiih kasus klasifikasi dan menggunakan metrik **akurasi, precision, recall, dan F1 score**. Jelaskan mengenai beberapa hal berikut:
 - Penjelasan mengenai metrik yang digunakan
 - Menjelaskan hasil proyek berdasarkan metrik evaluasi
