@@ -61,7 +61,7 @@ Proyek yang dibuat menggunakan metode regresi logistik dengan menggunakan datase
 - ChestPainType : Tipe Nyeri Dada [TA: Typical Angina, ATA: Atypical Angina, NAP: Non-Anginal Pain, ASY: Asymptomatic]
 - RestingBP : Tekanan darah [mm Hg]
 - Cholesterol : Kolestrol serum [mm/dl]
-- FastingBS : Puasa gula darah [1: jika puasa gula darahnnya>120mg/dl, 0: lainnya]
+- FastingBS : Gula darah puasa [1: jika puasa gula darahnnya>120mg/dl, 0: lainnya]
 - RestingECG : Hasil elektrokardiogram istirahat [Normal: Normal, ST: memiliki kelainan gelombang ST-T (gelombang T inversi dan/atau ST eleavasi atau depresi > 0.05 mV), LVH: menampilkan hipertrofi ventrikel kiri yang mungkin atau pasti menurut kriteria Estes]
 - MaxHR : Detak jantung maksimum yang dicapai [bernilai numerik antara 60 dan 202]
 - ExerciseAngina : Latihan induksi angina [Y:Iya, N: Tidak]
