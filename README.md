@@ -14,7 +14,7 @@ yang tulis oleh Gill S. dkk menerapkan berbagai metode *machine learning* untuk 
 Hasil studinya menunjukkan bahwa regresi logistik tetap menjadi metode yang efektif dan populer dalam prediksi penyakit jantung, dengan akurasi yang dapat 
 mencapai hingga 88.89% pada beberapa model. Keunggulan metode regresi logistik adalah kemampuannya untuk memberikan interpretasi yang jelas melalui odds ratio, 
 yang sangat berguna dalam konteks medis untuk memahami pengaruh faktor risiko terhadap kejadian penyakit. Dengan demikian, program yang dibuat menggunakan metode regresi logistik
-dengan menggunakan dataset dari Kaggle berjudul [Heart Failure Prediction Dataset] (https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction) yang memiliki 918 data. 
+dengan menggunakan dataset dari Kaggle berjudul [Heart Failure Prediction Dataset](https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction) yang memiliki 918 data. 
 
 Sebagaimana yang sudah disampaikan, penyakit CVDs penyebab utama kematian global. Penyakit ini bisa dicegah dan diminimalkan dengan deteksi dini dan pengelolaan yang tepat. 
 Dengan adanya kematian ini berakibat ke ekonomi yang signifikan, di mana kasus banyak terjadi di negara yang berpenghasilan rendah dan menengah, sehingga ini menjadi tantangan 
