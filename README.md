@@ -255,4 +255,6 @@ weighted avg       0.89      0.89      0.89       184
    ```
 
 ### Output Visualisasi
-![Confusion Matrix](Confusion_Matrix.png)
+![Confusion Matrix](ConfusionMatrix.png)
+![Koefisien Fitur](VisualisasiNo3.png)
+![Prevalensi Gagal Jantung](VisualisasiNo4.png)
