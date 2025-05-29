@@ -30,10 +30,10 @@ dapat diselesaikan dengan pengumpulan data dan pengembangan model prediksi yang 
 Proses klasifikasi yang dilakukan untuk memprediksi kemungkinan seorang pasien didiagnosis gagal jantung (HeartDisease) berdasarkan dataset yang digunakan.
 
 ### Problem Statements
-1. Seberapa efektif kita dapat mengidentifikasi pasien yang berisiko tinggi mengalami gagal jantung berdasarkan dataset?
-2. Dari semua pasien yang sebenarnya akan mengalami gagal jantung, berapa banyak yang berhasil diidentifikasi oleh model kita?
+1. Seberapa efektif model dapat mengidentifikasi pasien yang berisiko tinggi mengalami gagal jantung berdasarkan dataset?
+2. Dari semua pasien yang sebenarnya akan mengalami gagal jantung, berapa banyak yang berhasil diidentifikasi oleh model?
 3. Fitur klinis apa yang paling berpengaruh atau merupakan prediktor terkuat untuk kejadian gagal jantung?
-4. Bagaimana kombinasi usia dan kadar gula darah puasa (FastingBS) memengaruhi risiko gagal jantung? Apakah gula darah puasa yang tinggi merupakan faktor risiko yang lebih signifikan pada kelompok usia tertentu?
+4. Bagaimana kombinasi usia dan gula darah puasa (FastingBS) memengaruhi risiko gagal jantung? Apakah gula darah puasa yang tinggi merupakan faktor risiko yang lebih signifikan pada kelompok usia tertentu?
 
 ### Goals
 Proyek ini bertujuan untuk mengembangkan pemahaman tentang faktor-faktor yang berkontribusi terhadap penyakit CVDs, serta membangun model prediktif yang dapat diandalkan untuk membantu indentifiksi dini pasien yang beresiko tinggi. 
@@ -192,14 +192,67 @@ Setelah data disiapkan dan dipahami melalui EDA, lengkah berikutnya adalah memba
 
 ## Evaluation
 Setelah model berhasil dilatih, selanjutnya dilakukan evaluasi kinerja model. Metrik evaluasi dapat membantu kita memahami seberapa baik model dalam memprediksi HeartDisease dan menjawab pertanyaan-pertanyaan bisnis yang telat ditetapkan. Dalam proyek ini, digunakan akurasi, *confusion matrix*, recall, dan F1-Score. Metrik-metrik ini dipilih karena sangat relevan untuk masalah klasifikasi biner yang di mana identifikasi positif dan meminimalisasi kesalahan dengan konsekuensi penting.
-- Akurasi (*Accuracy Score*)
-- Recall
-- 
-Sebagai contoh, Anda memiih kasus klasifikasi dan menggunakan metrik **akurasi, precision, recall, dan F1 score**. Jelaskan mengenai beberapa hal berikut:
-- Penjelasan mengenai metrik yang digunakan
-- Menjelaskan hasil proyek berdasarkan metrik evaluasi
+Hasil dari metrik utama dengan klasifikasi:
+```
+Classification Report:
+              precision    recall  f1-score   support
 
-Ingatlah, metrik evaluasi yang digunakan harus sesuai dengan konteks data, problem statement, dan solusi yang diinginkan.
+           0       0.89      0.87      0.88        82
+           1       0.89      0.91      0.90       102
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan formula metrik dan bagaimana metrik tersebut bekerja.
+    accuracy                           0.89       184
+   macro avg       0.89      0.89      0.89       184
+weighted avg       0.89      0.89      0.89       184
+```
+### Menjawab Problem Statements
+1. Model ini efektif dapat mengidentifikasi pasien yang berisiko tinggi mengalami gagal jantung berdasarkan dataset dapat dilihat pada bagian `accuracy` sebesar 0.89 atau 89%.
+2. Banyaknya pasien yang berhasil diidentifikasi gagal jantung oleh model sebesar 0.93 atau 93%.
+3. Berdasarkan hasil pemodelan, fitur klinis yang paling berpengaruh terjadinya kejadian gagal jantung adalah pasien yang memiliki variabel (Sex_M) atau kelamin laki-laki (M), gula darah puasa tinggi (FastingBS_1), RestingECG=ST, dan melakukan olahraga induksi angina di mana fitur-fitur tersebut meminiliki nilai koefisien positif. Sebaliknya fitur-fitur yang memiliki nilai koefisien negatif menurunkan risiko gagal jantung.
+   ```
+   --- Analisis Fitur Paling Berpengaruh ---
+
+   Fitur berdasarkan Pengaruh Terbesar (Koefisien Absolut):
+                 Feature  Coefficient  Abs_Coefficient
+   13        ST_Slope_Up    -0.754023         0.754023
+   7   ChestPainType_NAP    -0.726255         0.726255
+   6   ChestPainType_ATA    -0.674307         0.674307
+   5               Sex_M     0.573575         0.573575
+   14        FastingBS_1     0.537034         0.537034
+   12      ST_Slope_Flat     0.448119         0.448119
+   11   ExerciseAngina_Y     0.409586         0.409586
+   8    ChestPainType_TA    -0.326297         0.326297
+   3               MaxHR    -0.282300         0.282300
+   4             Oldpeak     0.236586         0.236586
+   9   RestingECG_Normal    -0.106034         0.106034
+   10      RestingECG_ST    -0.076449         0.076449
+   0                 Age     0.070084         0.070084
+   2         Cholesterol     0.041867         0.041867
+   1           RestingBP    -0.022743         0.022743
+   ```
+5. Kelompok usia dengan pasien terbanyak ada di renatng umur 50-59 tahun. Dari tabel prevalensi dan visualisasi, pada semua kelompok usia lebih banyak pasien yang memiliki gula darah puasa jauh lebih tinggi dibandingkan dengan pasien dengan gula darah puasa normal. Pada kelompok usia <40, perbedaan prevalensi sangat drastis, hanya 26.39% yang FastingBS normal melonjak menjadi 87.50% pada FastingBS tinggi. Dikatakan tinggi karena terjadi lompatan prevalensi terbesar (sekiyar 61%) dibandingkan semua kelompok umur. Dengan demikian, dapat dikatakan gula darah puasa tinggi merupakan faktor yang sangat signifikan di semua kelompok umur, tetapi dampaknya paling terlihat dan mempercepat risiko terjadinya gagal jantung pada kelomok usia yang lebih muda (<50). Namun tidak bisa dipungkiri juga kelompok usia yang lebih tua memiliki resiko bagi yang memiliki gula darah puasa tinggi. 
+
+
+   ```
+   --- Analisis Interaksi Usia dan Gula Darah Puasa (FastingBS) ---
+
+   Distribusi Pasien Berdasarkan Kelompok Usia:
+   Age_Group
+   <40       80
+   40-49    211
+   50-59    374
+   60-69    222
+   70+       29
+   Name: count, dtype: int64
+
+   Prevalensi Gagal Jantung (%) Berdasarkan Kelompok Usia dan Gula Darah Puasa:
+   FastingBS_Label  Normal (<120 mg/dL)  Tinggi (>=120 mg/dL)
+   Age_Group                                                 
+   <40                        26.388889             87.500000
+   40-49                      35.135135             76.923077
+   50-59                      50.359712             75.000000
+   60-69                      67.346939             85.333333
+   70+                        65.000000             77.777778
+   ```
+
+### Output Visualisasi
+
