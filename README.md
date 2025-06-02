@@ -267,6 +267,11 @@ weighted avg       0.89      0.89      0.89       184
    ```
 
 ### Output Visualisasi
-![Confusion Matrix](ConfusionMatrix.png)
-![Koefisien Fitur](VisualisasiNo3.png)
-![Prevalensi Gagal Jantung](VisualisasiNo4.png)
+![ConfusionMatrix](https://github.com/user-attachments/assets/bf0a3541-670c-48a2-89ac-61965df95912)
+
+![Koefisien Fitur Teratas dari Model Regresi Logistik](https://github.com/user-attachments/assets/e14711a0-b7b6-4b43-a673-e8cd51cbdc32)
+
+![Prevalensi Gagal Jantung Berdasarkan Kelompok Usia dan Gula Darah Puasa](https://github.com/user-attachments/assets/0b7d70c9-cefc-4223-a15b-97848dbdc880)
+
+
+
