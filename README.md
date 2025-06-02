@@ -69,6 +69,9 @@ Proyek yang dibuat menggunakan metode regresi logistik dengan menggunakan datase
 - ST_Slope : Kemiringan dari puncak latihan segmen ST
 - HeartDisease : Hasil output kelas [1:penyakit jantung, 0: normal]
 
+### Kondisi Data Awal:
+Dari hasil statistika deskriptif yang diperoleh (menggunakan `.describe()`), teridentifikasi bahwa kolom `RestingBP` (Tekanan Darah Istirahat) dan `Cholesterol` (Kolesterol Serum) memiliki nilai minimum 0. Secara medis, nilai 0 untuk tekanan darah sistolik dan kolesterol serum adalah anomali atau tidak masuk akal, karena menunjukkan kondisi yang tidak kompatibel dengan kehidupan. Keberadaan nilai 0 ini mengindikasikan adanya missing values yang tidak diisi atau input data yang salah, dan perlu ditangani pada tahap pra-pemrosesan data untuk memastikan validitas analisis dan model.
+
 ### Exploratory Data Analysis (EDA)
 Untuk memahami dataset yang digunakan dilakukan:
 - Distribusi variabel target (HeartDisease)
@@ -82,12 +85,17 @@ Persiapan data yang dilakukan:
   Dilakukan dengan menggunakan `.head()`,`.info()` dan `.describe()` agar memudahkan saat melakukan pemrosesan data
 - Mengecek adanya *missing value*
   Mengevaluasi jumlah data yang memiliki data kosong atau NaN di setiap kolomnya agar tidak menghasilkan prediksi yang salah dengan `.isnull().sum()`.
+- Penanganan nilai nol pada kolom numerik
+  Mengidentifikasi dan mengisi nilai 0 yang tidak logis pada kolom `Cholesterol` dan `RestingBP` dengan nilai median dari masing-masing kolom. Penanganan ini penting karena nilai 0 pada tekanan darah dan kolesterol tidak merepresentasikan kondisi biologis yang valud dan dapat mempengaruhi kinerja model.
 - Identifikasi Fitur dan Target
-  Kolom HeartDisease diidentifikasi sebagai variabel target (y) dan sisanya akan digunakan sebagai variabel prediktor (X).
+  Kolom `HeartDisease` diidentifikasi sebagai variabel target (`y`) dan sisanya akan digunakan sebagai variabel prediktor (`X`).
+- Preprocessing Fitur Kategorikal (One-Hot Encoding)
+  Fitur-fitur kategorikal (`Sex`, `ChestPainType`, `RestingECG`, `ExerciseAngina`, `ST_Slope`) diubah menjadi format numerik menggunakan One-Hot Encoding. Ini menciptakan kolom biner baru untuk setiap kategori unik, memastikan model dapat memprosesnya dengan benar. Parameter `handle_unknown='ignore'` digunakan untuk menangani kategori yang mungkin muncul di data testing tetapi tidak ada di data *training*, mencegah error.
 - Pembagian data (*training* dan *testing set*)
-  Dibagi menjadi 80% *training* dan 20% *testing* dan menggunakan parameter `stratify=y` untuk memastikan proporsi kelas target di data *training* dan *testing* sama. Selain itu, pembagian ini untuk mencegah *overfitting* pada data *testing*.
-- Preprocessing fitur
-  Dilakukan transform kolom dengan `StandardScaler` untuk kolom numerik sehingga memiliki rata-rata 0 dan standar deviasi 1. Fitur ini mencegah adanya dominasi perhitungan jarak atau bobot model dibandingkan fitur dengan rentang kecil sepertti pada variabel Sex yang memiliki nilai 0 atau 1. Digunakan juga One-Hot Encoding untuk kolom kategorikal menjadi kolom biner dengan parameter `handle_unkwown='ignore'` untuk menangani kategori yang mungkin muncul di data *testing* tetapi tidak ada di data *training*.
+  Data dibagi menjadi 80% untuk training dan 20% untuk testing menggunakan `train_test_split`. Parameter `stratify=y` digunakan untuk memastikan proporsi kelas target (`HeartDisease`) di data training dan testing sama, mencegah bias dan overfitting.
+- Preprocessing Fitur Numerik (StandardScaler)
+  Kolom-kolom numerik (`Age`, `RestingBP`, `Cholesterol`, `FastingBS`, `MaxHR`, `Oldpeak`) diskalakan menggunakan `StandardScaler`. Proses ini mengubah data sehingga memiliki rata-rata 0 dan standar deviasi 1. Penskalaan diterapkan dengan `fit_transform` pada data training (`X_train`) dan hanya `transform` pada data testing (`X_test`), memastikan model hanya belajar dari distribusi data training dan menerapkan transformasi yang sama pada data testing. Fitur ini mencegah adanya dominasi perhitungan jarak atau bobot model oleh fitur dengan rentang nilai besar dibandingkan fitur dengan rentang kecil (misalnya, variabel `Sex` yang hanya memiliki nilai 0 atau 1).
+  
 
    ### Hasil Dari Data Preparation
   ```
@@ -152,7 +160,7 @@ Persiapan data yang dilakukan:
    75%      1.500000      1.000000  
    max      6.200000      1.000000  
    ```
-   Tabel statistika deskriptif untuk mempermudah melihat nilai-nilai pada kolom numerik. Pada variabel RestingBP dan Cholesterol, nilai minimumnya 0 sehingga data ini harus dicek kembali. 
+   Tabel statistika deskriptif untuk mempermudah melihat nilai-nilai pada kolom numerik. Pada variabel `RestingBP` dan `Cholesterol`, nilai minimumnya 0 sehingga data ini harus dicek kembali. 
    ```
    Jumlah nilai NaN di setiap kolom:
    Age               0
@@ -172,23 +180,27 @@ Persiapan data yang dilakukan:
    Tidak ada variabel yang memiliki kolom kosong.
   
 ## Modeling
-Setelah data disiapkan dan dipahami melalui EDA, lengkah berikutnya adalah membangun model yang mampu mempelajari pola dari data *training* dan membuat prediksi akurat pada data baru. Pada proyek ini, model yang digunakan adalah regresi logistik yang menjadi algoritma klasifikasi. Algoritma ini digunakan untuk memprediksi probabilitas hasil biner, misalnya 0 titik gagal jantung dan 1 gagal jantung.
+Setelah data disiapkan dan dipahami melalui EDA, langkah berikutnya adalah membangun model yang mampu mempelajari pola dari data training dan membuat prediksi akurat pada data baru. Pada proyek ini, model yang digunakan adalah Regresi Logistik, sebuah algoritma klasifikasi yang kuat dan sering digunakan.
+
+Cara Kerja Algoritma Regresi Logistik
+Regresi Logistik adalah algoritma yang digunakan untuk memprediksi probabilitas hasil biner (misalnya, 0 untuk 'tidak gagal jantung' dan 1 untuk 'gagal jantung'). Berbeda dengan regresi linear yang memprediksi nilai kontinu, regresi logistik memetakan setiap kombinasi fitur input ke dalam sebuah probabilitas antara 0 dan 1.
 - Kelebihan Regresi Logistik:
-   - Sederhana dan cepat
-   - Menghasilkan *output* probabilitas
-   - Efektif untuk data yang dapat dipisahkan secara linier
+   - Sederhana dan cepat dalam implementasi dan pelatihan.
+   - Menghasilkan *output* probabilitas yang berguna untuk interpretasi dan pengambilan keputusan.
+   - Efektif untuk data yang dapat dipisahkan secara linier.
 - Kekurangan Regresi Logistik:
-   - Asumsi linieritas, memungkinkan model bekerja tidak optimal
-   - Sensitif terhadap fitur yang tidak relevan
-   - Kurang baik untuk data yang hubungan kompleks
+   - Asumsi linieritas hubungan antara fitur dengan *log-odds*, sehingga model mungkin bekerja tidak optimal jika hubungan sebenarnya non-linear.
+   - Sensitif terhadap fitur yang tidak relevan atau *outlier*.
+   - Kurang baik untuk data yang hubungan sangat kompleks atau non-linear yang kuat, di mana model yang lebih kompleks mungkin diperlukan.
 
 ### Tahapan Modeling
 1. Pelatihan Model Regresi Logistik
    - Inisialisasi model `LogisticRegression`
-   - Pelatihan model `model.fit()`, dilatih menggunakan data *training* yang sudah diskalakan (`X_train_scaled`) dan variabel target yang sesuai (`y_train`). Proses pelatihan ini untuk meminimalkan fungsi loss dan memprediksi probabilitas HeartDisease. Parameter yang digunakan `random_state=42` untuk melakukan pengambilan acak dan `solver=`liblinear`` untuk optimasi, menemukan bobot koefisien terbaik.
+   - Pelatihan model menggunakan `model.fit()`, dilatih menggunakan data training yang sudah diskalakan (`X_train_scaled`) dan variabel target yang sesuai (`y_train`). Proses pelatihan ini bertujuan untuk menemukan bobot (koefisien) terbaik dengan meminimalkan fungsi loss dan memprediksi probabilitas `HeartDisease`. Parameter yang digunakan `random_state=42` untuk konsistensi hasil pengambilan acak dan `solver='liblinear'` sebagai algoritma optimasi yang efektif untuk dataset kecil hingga menengah.
 2. Prediksi
    - Setelah model berhasil dilatih, `model.predict()` akan digunakan untuk membuat prediksi pada data *testing* yang sudah diskalakan (`X_test_scaled`). Model ini akan menghasilkan *output* biner (0 atau 1) yang mewakili prediksi apakah pasien akan mengalami gagal jantung atau tidak.
-3. Merubah variabel target menjadi FastingBS untuk menjawab pertanyaan bisnis keempat untuk melakukan analisis interaksi antarfitur.
+3. Perubahan Variabel Target untuk Analisis Interaksi
+   - Untuk menjawab pertanyaan bisnis keempat mengenai analisis interaksi antar fitur, variabel target diubah menjadi FastingBS pada analisis selanjutnya.
 
 ## Evaluation
 Setelah model berhasil dilatih, selanjutnya dilakukan evaluasi kinerja model. Metrik evaluasi dapat membantu kita memahami seberapa baik model dalam memprediksi HeartDisease dan menjawab pertanyaan-pertanyaan bisnis yang telat ditetapkan. Dalam proyek ini, digunakan akurasi, *confusion matrix*, recall, dan F1-Score. Metrik-metrik ini dipilih karena sangat relevan untuk masalah klasifikasi biner yang di mana identifikasi positif dan meminimalisasi kesalahan dengan konsekuensi penting.
@@ -206,7 +218,7 @@ weighted avg       0.89      0.89      0.89       184
 ```
 ### Menjawab Problem Statements
 1. Model ini efektif dapat mengidentifikasi pasien yang berisiko tinggi mengalami gagal jantung berdasarkan dataset dapat dilihat pada bagian `accuracy` sebesar 0.89 atau 89%.
-2. Banyaknya pasien yang berhasil diidentifikasi gagal jantung oleh model sebesar 0.93 atau 93%.
+2. Banyaknya pasien yang berhasil diidentifikasi gagal jantung oleh model, yaitu recall untuk kelas 1 adalah 0.91 atau 91%.
 3. Berdasarkan hasil pemodelan, fitur klinis yang paling berpengaruh terjadinya kejadian gagal jantung adalah pasien yang memiliki variabel (Sex_M) atau kelamin laki-laki (M), gula darah puasa tinggi (FastingBS_1), RestingECG=ST, dan melakukan olahraga induksi angina di mana fitur-fitur tersebut meminiliki nilai koefisien positif. Sebaliknya fitur-fitur yang memiliki nilai koefisien negatif menurunkan risiko gagal jantung.
    ```
    --- Analisis Fitur Paling Berpengaruh ---
