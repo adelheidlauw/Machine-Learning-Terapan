@@ -81,21 +81,21 @@ Untuk memahami dataset yang digunakan dilakukan:
 
 ## Data Preparation
 Persiapan data yang dilakukan: 
-- Mengecek informasi singkat dan statistika dataset
-  Dilakukan dengan menggunakan `.head()`,`.info()` dan `.describe()` agar memudahkan saat melakukan pemrosesan data
-- Mengecek adanya *missing value*
-  Mengevaluasi jumlah data yang memiliki data kosong atau NaN di setiap kolomnya agar tidak menghasilkan prediksi yang salah dengan `.isnull().sum()`.
-- Penanganan nilai nol pada kolom numerik
-  Mengidentifikasi dan mengisi nilai 0 yang tidak logis pada kolom `Cholesterol` dan `RestingBP` dengan nilai median dari masing-masing kolom. Penanganan ini penting karena nilai 0 pada tekanan darah dan kolesterol tidak merepresentasikan kondisi biologis yang valud dan dapat mempengaruhi kinerja model.
-- Identifikasi Fitur dan Target
-  Kolom `HeartDisease` diidentifikasi sebagai variabel target (`y`) dan sisanya akan digunakan sebagai variabel prediktor (`X`).
-- Preprocessing Fitur Kategorikal (One-Hot Encoding)
-  Fitur-fitur kategorikal (`Sex`, `ChestPainType`, `RestingECG`, `ExerciseAngina`, `ST_Slope`) diubah menjadi format numerik menggunakan One-Hot Encoding. Ini menciptakan kolom biner baru untuk setiap kategori unik, memastikan model dapat memprosesnya dengan benar. Parameter `handle_unknown='ignore'` digunakan untuk menangani kategori yang mungkin muncul di data testing tetapi tidak ada di data *training*, mencegah error.
-- Pembagian data (*training* dan *testing set*)
-  Data dibagi menjadi 80% untuk training dan 20% untuk testing menggunakan `train_test_split`. Parameter `stratify=y` digunakan untuk memastikan proporsi kelas target (`HeartDisease`) di data training dan testing sama, mencegah bias dan overfitting.
-- Preprocessing Fitur Numerik (StandardScaler)
-  Kolom-kolom numerik (`Age`, `RestingBP`, `Cholesterol`, `FastingBS`, `MaxHR`, `Oldpeak`) diskalakan menggunakan `StandardScaler`. Proses ini mengubah data sehingga memiliki rata-rata 0 dan standar deviasi 1. Penskalaan diterapkan dengan `fit_transform` pada data training (`X_train`) dan hanya `transform` pada data testing (`X_test`), memastikan model hanya belajar dari distribusi data training dan menerapkan transformasi yang sama pada data testing. Fitur ini mencegah adanya dominasi perhitungan jarak atau bobot model oleh fitur dengan rentang nilai besar dibandingkan fitur dengan rentang kecil (misalnya, variabel `Sex` yang hanya memiliki nilai 0 atau 1).
-  
+- Mengecek informasi singkat dan statistika dataset:
+  Dilakukan dengan menggunakan `.head()`, `.info()`, dan `.describe()` agar memudahkan saat melakukan pemrosesan data.
+- Penanganan Nilai Nol pada Kolom Numerik:
+   - Mengidentifikasi dan mengisi nilai 0 yang tidak logis pada kolom `Cholesterol` dan `RestingBP` dengan nilai median dari masing-masing kolom. Penanganan ini penting karena nilai 0 pada tekanan darah dan kolesterol serum tidak merepresentasikan kondisi biologis yang valid dan dapat mempengaruhi kinerja model.
+   - Meskipun tidak memiliki nilai `NaN` (Not a Number) yang terdeteksi dari hasil `.isnull().sum()` pada dataset awal, langkah eksplorasi menunjukkan bahwa beberapa kolom (seperti `RestingBP` dan `Cholesterol`) memiliki nilai minimum 0 yang secara kontekstual tidak valid. Oleh karena itu, `data.fillna(data.median(numeric_only=True), inplace=True)` juga dijalankan untuk menangani potensi nilai hilang yang mungkin muncul dari pemrosesan lain atau untuk menjaga konsistensi alur kerja, meskipun pada dataset ini secara spesifik tidak ada nilai `NaN` yang perlu diisi.
+- Mengecek Adanya Missing Value (Verifikasi):
+  Setelah potensi penanganan nilai 0 atau *missing values*, dilakukan verifikasi ulang dengan `data.isnull().sum()` untuk memastikan tidak ada lagi nilai yang hilang di setiap kolom.
+- Identifikasi Fitur dan Target:
+  Kolom `HeartDisease` diidentifikasi sebagai variabel target (y) dan sisanya akan digunakan sebagai variabel prediktor (X).
+- Preprocessing Fitur Kategorikal (One-Hot Encoding): F
+  Fitur-fitur kategorikal (`Sex`, `ChestPainType`, `RestingECG`, `ExerciseAngina`, `ST_Slope`, dan `FastingBS`) diubah menjadi format numerik menggunakan One-Hot Encoding. Ini menciptakan kolom biner baru untuk setiap kategori unik, memastikan model dapat memprosesnya dengan benar. Khususnya, `FastingBS` yang merupakan variabel biner (0 atau 1) juga di-encode untuk mendapatkan representasi yang konsisten dengan fitur kategorikal lainnya. Parameter `handle_unknown='ignore'` digunakan untuk menangani kategori yang mungkin muncul di data *testing* tetapi tidak ada di data *training*, mencegah error.
+- Pembagian Data (Training dan Testing Set):
+  Data dibagi menjadi 80% untuk *training* dan 20% untuk *testing* menggunakan `train_test_split`. Parameter `stratify=y` digunakan untuk memastikan proporsi kelas target (`HeartDisease`) di data *training* dan *testing* sama, mencegah bias dan *overfitting*.
+- Preprocessing Fitur Numerik (StandardScaler):
+  Kolom-kolom numerik yang tersisa (`Age`, `RestingBP`, `Cholesterol`, `MaxHR`, `Oldpeak`) serta fitur biner hasil One-Hot Encoding dari `FastingBS` (`FastingBS_1`) diskalakan menggunakan `StandardScaler`. Proses ini mengubah data sehingga memiliki rata-rata 0 dan standar deviasi 1. Penskalaan diterapkan dengan `fit_transform` pada data training (`X_train_scaled`) dan hanya `transform` pada data testing (`X_test_scaled`), memastikan model hanya belajar dari distribusi data training dan menerapkan transformasi yang sama pada data testing. Fitur ini mencegah adanya dominasi perhitungan jarak atau bobot model oleh fitur dengan rentang nilai besar dibandingkan fitur dengan rentang kecil.
 
    ### Hasil Dari Data Preparation
   ```
